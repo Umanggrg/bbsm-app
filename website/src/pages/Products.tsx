@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { Package, Search, X, Star } from 'lucide-react';
 import { api } from '../api/client';
 
@@ -19,7 +20,7 @@ interface Product {
 
 function ProductCard({ p }: { p: Product }) {
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-black/[0.04] hover:-translate-y-0.5">
+    <Link to={`/products/${p.id}`} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-black/[0.04] hover:-translate-y-0.5 block">
       {/* Image */}
       <div className="h-44 bg-cream flex items-center justify-center relative overflow-hidden">
         {p.image_url ? (
@@ -61,7 +62,7 @@ function ProductCard({ p }: { p: Product }) {
           <span className="text-xs text-gray-400">/{p.unit}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

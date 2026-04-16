@@ -24,6 +24,12 @@ export const API = {
     categories: `${BASE_URL}/api/v1/promotions/categories`,
     detail: (id: string) => `${BASE_URL}/api/v1/promotions/${id}`,
   },
+
+  products: {
+    list: `${BASE_URL}/api/v1/products`,
+    categories: `${BASE_URL}/api/v1/products/categories`,
+    detail: (id: string) => `${BASE_URL}/api/v1/products/${id}`,
+  },
 } as const;
 
 /** Shared fetch helper that unwraps the { success, data, message } envelope */

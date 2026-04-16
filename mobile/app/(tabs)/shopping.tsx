@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -94,9 +95,10 @@ function useCategories() {
 
 // ── Product Card ─────────────────────────────────────────────────────────────
 function ProductCard({ product, width }: { product: Product; width: number }) {
+  const router = useRouter();
   const imgHeight = width * 0.72;
   return (
-    <View style={[cardStyles.card, { width }]}>
+    <Pressable style={[cardStyles.card, { width }]} onPress={() => router.push(`/product/${product.id}`)} android_ripple={{ color: '#0001' }}>
       {/* Image */}
       <View style={[cardStyles.imgWrap, { height: imgHeight }]}>
         {product.image_url ? (
@@ -124,7 +126,7 @@ function ProductCard({ product, width }: { product: Product; width: number }) {
           <Text style={cardStyles.unit}>/{product.unit}</Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
