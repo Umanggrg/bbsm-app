@@ -30,9 +30,10 @@ const { Pool } = require('pg');
 
 // Build pool directly here (without going through src/config/database.js) so
 // the migration runner can be invoked standalone without needing all app deps.
+const connString = process.env.DATABASE_URL || process.env.DB_URL;
 const pool = new Pool(
-  process.env.DB_URL
-    ? { connectionString: process.env.DB_URL }
+  connString
+    ? { connectionString: connString, ssl: connString.includes('neon.tech') ? { rejectUnauthorized: false } : false }
     : {
         host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT || '5432', 10),

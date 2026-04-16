@@ -1,7 +1,13 @@
 'use strict';
 
-// Load env vars before anything else
 require('dotenv').config();
 
-// Export the Express app for Vercel serverless
-module.exports = require('../src/app');
+let app;
+try {
+  app = require('../src/app');
+} catch (e) {
+  console.error('[api/index] App initialization error:', e.message, e.stack);
+  app = (req, res) => res.status(500).json({ error: 'Init failed', detail: e.message });
+}
+
+module.exports = app;

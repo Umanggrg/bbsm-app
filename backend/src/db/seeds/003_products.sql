@@ -40,7 +40,7 @@ VALUES
 ('Mineral Water 1.5L',       'मिनरल वाटर १.५ लिटर',   'BEV-WAT-001', 'Pure himalayan mineral water',                 'Beverages', 'Water',   40.00,  'litre', TRUE, FALSE),
 
 -- ── SNACKS & CONFECTIONERY ────────────────────────────────────────────────────
-('Lay\'s Classic Chips 78g', 'लेज चिप्स ७८ ग्राम',    'SNK-CHP-001', 'Crispy potato chips, original salted',         'Snacks', 'Chips',     80.00,  'piece', TRUE, FALSE),
+('Lay''s Classic Chips 78g', 'लेज चिप्स ७८ ग्राम',    'SNK-CHP-001', 'Crispy potato chips, original salted',         'Snacks', 'Chips',     80.00,  'piece', TRUE, FALSE),
 ('Oreo Biscuit 120g',        'ओरियो बिस्किट १२० ग्राम','SNK-BSC-001','Chocolate sandwich cookies with cream filling', 'Snacks', 'Biscuits',  85.00,  'piece', TRUE, FALSE),
 ('Britannia Good Day 120g',  'ब्रिटानिया गुड डे १२० ग्राम','SNK-BSC-002','Butter cookies with cashews',             'Snacks', 'Biscuits',  55.00,  'piece', TRUE, FALSE),
 ('Kitkat 4-Finger 40g',      'किटक्याट ४० ग्राम',     'SNK-CHO-001', 'Crispy wafer chocolate bar',                  'Snacks', 'Chocolates',120.00,  'piece', TRUE, TRUE),
