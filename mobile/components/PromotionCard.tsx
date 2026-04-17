@@ -125,16 +125,15 @@ export function PromotionCard({ promotion, variant = 'grid' }: Props) {
 const styles = StyleSheet.create({
   // ── Featured ─────────────────────────────────────────────────────────────
   featuredCard: {
-    borderRadius: 18,
+    borderRadius: 22,
     overflow: 'hidden',
     marginRight: 14,
     backgroundColor: Colors.orangeLight,
-    // Shadow
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.18,
-    shadowRadius: 16,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.20,
+    shadowRadius: 20,
+    elevation: 8,
   },
   placeholder: {
     backgroundColor: Colors.orangeLight,
@@ -173,10 +172,10 @@ const styles = StyleSheet.create({
   },
   featuredTitle: {
     fontFamily: 'Sora_700Bold',
-    fontSize: 17,
+    fontSize: 18,
     color: '#fff',
-    lineHeight: 23,
-    letterSpacing: -0.2,
+    lineHeight: 25,
+    letterSpacing: -0.44,
   },
   featuredDesc: {
     fontFamily: 'Sora_400Regular',
@@ -195,13 +194,13 @@ const styles = StyleSheet.create({
   gridCard: {
     flex: 1,
     backgroundColor: Colors.surface,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 14,
+    elevation: 5,
   },
   gridImageWrap: {
     width: '100%',
@@ -242,18 +241,18 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   gridContent: {
-    padding: 11,
-    gap: 3,
+    padding: 13,
+    gap: 4,
   },
   gridTitle: {
     fontFamily: 'Sora_600SemiBold',
     fontSize: 13,
     color: Colors.textPrimary,
-    lineHeight: 18,
-    letterSpacing: -0.1,
+    lineHeight: 19,
+    letterSpacing: -0.2,
   },
   gridDate: {
-    fontFamily: 'Sora_400Regular',
+    fontFamily: 'Sora_500Medium',
     fontSize: 11,
     color: Colors.textMuted,
   },

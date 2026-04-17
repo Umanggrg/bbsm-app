@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -110,46 +111,49 @@ export default function ProductDetailScreen() {
   );
 }
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const IMG_HEIGHT = Math.round(SCREEN_HEIGHT * 0.38);
+
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
     backgroundColor: Colors.background,
   },
   content: {
-    paddingBottom: 48,
+    paddingBottom: 56,
   },
   backBtn: {
     position: 'absolute',
     top: 52,
     left: 16,
     zIndex: 10,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    width: 42,
+    height: 42,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.92)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   image: {
-    width: '100%',
-    height: 280,
+    width: SCREEN_WIDTH,
+    height: IMG_HEIGHT,
     backgroundColor: Colors.surfaceAlt,
   },
   imagePlaceholder: {
-    width: '100%',
-    height: 240,
+    width: SCREEN_WIDTH,
+    height: IMG_HEIGHT,
     backgroundColor: Colors.surfaceAlt,
     alignItems: 'center',
     justifyContent: 'center',
   },
   body: {
-    padding: 20,
-    gap: 12,
+    padding: 22,
+    gap: 14,
   },
   breadcrumb: {
     flexDirection: 'row',
@@ -165,10 +169,10 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Sora_700Bold',
-    fontSize: 24,
+    fontSize: 26,
     color: Colors.textPrimary,
-    lineHeight: 32,
-    letterSpacing: -0.3,
+    lineHeight: 34,
+    letterSpacing: -0.44,
   },
   nameNe: {
     fontFamily: 'Sora_400Regular',
@@ -205,9 +209,9 @@ const styles = StyleSheet.create({
   },
   price: {
     fontFamily: 'Sora_700Bold',
-    fontSize: 32,
+    fontSize: 34,
     color: Colors.primary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.44,
   },
   unit: {
     fontFamily: 'Sora_400Regular',
@@ -234,12 +238,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: Colors.surfaceAlt,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    backgroundColor: Colors.surface,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
   skuLabel: {
     fontFamily: 'Sora_400Regular',
@@ -253,11 +260,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   disclaimer: {
-    backgroundColor: Colors.surfaceAlt,
-    borderRadius: 8,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    backgroundColor: Colors.surface,
+    borderRadius: 14,
+    padding: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 1,
     marginTop: 4,
   },
   disclaimerText: {

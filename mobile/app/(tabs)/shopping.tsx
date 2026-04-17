@@ -96,7 +96,7 @@ function useCategories() {
 // ── Product Card ─────────────────────────────────────────────────────────────
 function ProductCard({ product, width }: { product: Product; width: number }) {
   const router = useRouter();
-  const imgHeight = width * 0.72;
+  const imgHeight = Math.round(width * 0.82);
   return (
     <Pressable style={[cardStyles.card, { width }]} onPress={() => router.push(`/product/${product.id}`)} android_ripple={{ color: '#0001' }}>
       {/* Image */}
@@ -133,35 +133,36 @@ function ProductCard({ product, width }: { product: Product; width: number }) {
 const cardStyles = StyleSheet.create({
   card: {
     backgroundColor: Colors.surface,
-    borderRadius: 14,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 14,
+    elevation: 5,
   },
   imgWrap: { backgroundColor: Colors.background, position: 'relative' },
   img: { width: '100%', height: '100%' },
   imgPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   badge: {
     position: 'absolute',
-    top: 8,
-    left: 8,
+    top: 10,
+    left: 10,
     backgroundColor: Colors.primary,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   badgeText: {
-    fontFamily: 'Sora_600SemiBold',
-    fontSize: 10,
+    fontFamily: 'Sora_700Bold',
+    fontSize: 9,
     color: '#fff',
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
-  info: { padding: 10, gap: 3 },
+  info: { padding: 12, gap: 4 },
   category: {
-    fontFamily: 'Sora_500Medium',
+    fontFamily: 'Sora_600SemiBold',
     fontSize: 10,
     color: Colors.textSecondary,
     textTransform: 'uppercase',
@@ -172,9 +173,10 @@ const cardStyles = StyleSheet.create({
     fontSize: 13,
     color: Colors.textPrimary,
     lineHeight: 18,
+    letterSpacing: -0.1,
   },
-  priceRow: { flexDirection: 'row', alignItems: 'baseline', marginTop: 4, gap: 2 },
-  price: { fontFamily: 'Sora_700Bold', fontSize: 14, color: Colors.primary },
+  priceRow: { flexDirection: 'row', alignItems: 'baseline', marginTop: 6, gap: 2 },
+  price: { fontFamily: 'Sora_700Bold', fontSize: 15, color: Colors.primary, letterSpacing: -0.2 },
   unit: { fontFamily: 'Sora_400Regular', fontSize: 11, color: Colors.textSecondary },
 });
 
@@ -322,17 +324,17 @@ const styles = StyleSheet.create({
 
   header: {
     backgroundColor: Colors.surface,
-    paddingTop: 12,
+    paddingTop: 14,
     paddingBottom: 0,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Colors.border,
-    gap: 10,
+    gap: 12,
   },
   headerTitle: {
     fontFamily: 'Sora_700Bold',
-    fontSize: 28,
+    fontSize: 30,
     color: Colors.textPrimary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.44,
     paddingHorizontal: PADDING,
   },
 
@@ -341,28 +343,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: PADDING,
     backgroundColor: Colors.background,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: Platform.OS === 'ios' ? 10 : 8,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: Platform.OS === 'ios' ? 11 : 9,
     gap: 8,
   },
   searchInput: {
     flex: 1,
     fontFamily: 'Sora_400Regular',
-    fontSize: 14,
+    fontSize: 15,
     color: Colors.textPrimary,
     padding: 0,
   },
 
   chips: {
     paddingHorizontal: PADDING,
-    paddingBottom: 12,
+    paddingBottom: 14,
     gap: 8,
   },
   chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 24,
     backgroundColor: Colors.background,
     borderWidth: 1,
     borderColor: Colors.borderLight,
@@ -370,9 +372,14 @@ const styles = StyleSheet.create({
   chipActive: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   chipText: {
-    fontFamily: 'Sora_500Medium',
+    fontFamily: 'Sora_600SemiBold',
     fontSize: 13,
     color: Colors.textSecondary,
   },
