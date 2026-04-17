@@ -26,7 +26,7 @@ function SectionHead({ label, title, link, linkLabel }: {
     <div className="flex items-end justify-between mb-7">
       <div>
         <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1.5">{label}</p>
-        <h2 className="text-2xl md:text-3xl font-bold text-navy tracking-tight">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-navy" style={{ letterSpacing: '-0.44px' }}>{title}</h2>
       </div>
       {link && (
         <Link to={link} className="flex items-center gap-1 text-sm font-bold text-primary hover:text-primary-dark transition-colors group shrink-0">
@@ -65,7 +65,7 @@ export default function Home() {
               <Star size={11} fill="currentColor" />
               Nepal's #1 Supermarket Since 1984
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.08] tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.08]" style={{ letterSpacing: '-0.44px' }}>
               Fresh deals,<br />every week.
             </h1>
             <p className="mt-4 text-white/70 text-base md:text-lg leading-relaxed max-w-sm">
@@ -104,17 +104,18 @@ export default function Home() {
       <section className="border-b border-black/[0.07] bg-white">
         <div className="max-w-7xl mx-auto px-5 py-12">
           <SectionHead label="Browse" title="Shop by Department" link="/products" linkLabel="All products" />
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+          {/* Airbnb-style horizontal scroll category bar */}
+          <div className="flex gap-4 overflow-x-auto pb-2 -mx-5 px-5 [&::-webkit-scrollbar]:hidden">
             {departments.map(({ label, icon: Icon, color }) => (
               <Link
                 key={label}
                 to={`/products?category=${encodeURIComponent(label)}`}
-                className="group flex flex-col items-center gap-2.5 py-4 px-2 rounded-2xl hover:bg-cream transition-colors"
+                className="group flex flex-col items-center gap-2.5 py-4 shrink-0 w-20"
               >
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${color} group-hover:scale-105 transition-transform`}>
-                  <Icon size={20} />
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center ${color} group-hover:scale-105 transition-transform shadow-card`}>
+                  <Icon size={22} />
                 </div>
-                <p className="text-center text-[11px] font-semibold text-navy leading-tight line-clamp-2">{label}</p>
+                <p className="text-center text-[11px] font-semibold text-navy leading-tight line-clamp-2 w-full">{label}</p>
               </Link>
             ))}
           </div>
@@ -131,7 +132,7 @@ export default function Home() {
                 <Link
                   key={p.id}
                   to={`/offers/${p.id}`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-black/[0.06] hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200"
                 >
                   <div className="h-44 bg-primary-light relative overflow-hidden flex items-center justify-center">
                     {p.image_url ? (
@@ -175,7 +176,7 @@ export default function Home() {
                 <Link
                   key={p.id}
                   to={`/products/${p.id}`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-black/[0.07] hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200"
                 >
                   <div className="h-40 bg-cream flex items-center justify-center relative overflow-hidden">
                     {p.image_url ? (
@@ -210,7 +211,7 @@ export default function Home() {
           <SectionHead label="Locations" title="Nearest BBSM Stores" link="/stores" linkLabel="All 28 stores" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {stores.map((s: any) => (
-              <div key={s.id} className="group bg-white rounded-2xl border border-black/[0.07] p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
+              <div key={s.id} className="group bg-white rounded-2xl p-5 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200">
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-steel bg-steel-light px-2.5 py-1 rounded-md">
                     {s.province}

@@ -66,7 +66,7 @@ export default function ProductsList() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
+          <h1 className="text-2xl font-bold text-gray-900" style={{ letterSpacing: '-0.44px' }}>Products</h1>
           <p className="text-gray-500 mt-1">{total} total</p>
         </div>
         <div className="flex items-center gap-3">
@@ -144,7 +144,7 @@ export default function ProductsList() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-card overflow-hidden">
         {isLoading ? (
           <div className="py-20 text-center text-gray-400">Loading…</div>
         ) : products.length === 0 ? (

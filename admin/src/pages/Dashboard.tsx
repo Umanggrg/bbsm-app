@@ -26,14 +26,14 @@ export default function Dashboard() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900" style={{ letterSpacing: '-0.44px' }}>Dashboard</h1>
         <p className="text-gray-500 mt-1">BBSM Official App — Content Overview</p>
       </div>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         {stats.map(({ label, value, icon: Icon, color, link }) => (
-          <Link to={link} key={label} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <Link to={link} key={label} className="bg-white rounded-xl p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
             <div className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center mb-3`}>
               <Icon size={20} className="text-white" />
             </div>
@@ -44,7 +44,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent promotions */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl shadow-card">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="font-semibold text-gray-900">Recent Promotions</h2>
           <Link to="/promotions" className="text-sm text-[#E07830] font-semibold hover:underline">

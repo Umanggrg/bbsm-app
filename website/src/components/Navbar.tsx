@@ -22,7 +22,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className="sticky top-0 z-50">
       {/* ── Utility bar ───────────────────────────────────────────────── */}
       <div className="bg-navy text-white">
         <div className="max-w-7xl mx-auto px-5 h-9 flex items-center justify-between">
@@ -47,7 +47,7 @@ export default function Navbar() {
       </div>
 
       {/* ── Main navbar ───────────────────────────────────────────────── */}
-      <div className={`border-b border-black/[0.08] transition-shadow duration-200 ${scrolled ? 'shadow-sm' : ''}`}>
+      <div className={`border-b border-black/[0.08] transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-nav' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-5 h-16 flex items-center gap-6">
 
           {/* Logo */}

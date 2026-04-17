@@ -37,6 +37,10 @@ export default {
         // Deep navy text (building-inspired)
         navy: '#1A2D40',
       },
+      boxShadow: {
+        card: 'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
+        'card-hover': 'rgba(0,0,0,0.04) 0px 0px 0px 1px, rgba(0,0,0,0.08) 0px 4px 16px, rgba(0,0,0,0.14) 0px 8px 24px',
+      },
     },
   },
   plugins: [],

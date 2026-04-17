@@ -22,8 +22,13 @@ export default {
         'mid-gray': '#6E6E73',
       },
       boxShadow: {
-        card: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06)',
-        'card-hover': '0 4px 8px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.10)',
+        card: 'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
+        'card-hover': 'rgba(0,0,0,0.04) 0px 0px 0px 1px, rgba(0,0,0,0.08) 0px 4px 16px, rgba(0,0,0,0.14) 0px 8px 24px',
+        nav: 'rgba(0,0,0,0.04) 0px 2px 8px',
+      },
+      letterSpacing: {
+        heading: '-0.44px',
+        'heading-sm': '-0.18px',
       },
     },
   },

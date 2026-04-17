@@ -24,7 +24,7 @@ export default function Offers() {
       <div className="border-b border-black/[0.07]">
         <div className="max-w-7xl mx-auto px-5 py-10">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1.5">Deals & Savings</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-navy tracking-tight">Weekly Ad & Offers</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: '-0.44px' }}>Weekly Ad & Offers</h1>
           <p className="text-mid-gray mt-1.5 text-sm">
             {isLoading ? 'Loading…' : `${total} active offer${total !== 1 ? 's' : ''} across all BBSM stores`}
           </p>
@@ -32,12 +32,12 @@ export default function Offers() {
       </div>
 
       <div className="max-w-7xl mx-auto px-5 py-8">
-        {/* Category chips */}
+        {/* Category chips — Airbnb horizontal scroll bar */}
         {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-10">
+          <div className="flex gap-2 mb-10 overflow-x-auto -mx-5 px-5 pb-1 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setCategory(undefined)}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${!category ? 'bg-primary text-white' : 'bg-cream text-navy hover:bg-gray-200'}`}
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${!category ? 'bg-primary text-white shadow-card' : 'bg-cream text-navy hover:bg-gray-200'}`}
             >
               All
             </button>
@@ -45,7 +45,7 @@ export default function Offers() {
               <button
                 key={c}
                 onClick={() => setCategory(category === c ? undefined : c)}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold capitalize transition-all ${category === c ? 'bg-primary text-white' : 'bg-cream text-navy hover:bg-gray-200'}`}
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold capitalize transition-all ${category === c ? 'bg-primary text-white shadow-card' : 'bg-cream text-navy hover:bg-gray-200'}`}
               >
                 {c}
               </button>
@@ -57,7 +57,7 @@ export default function Offers() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse border border-black/[0.07]">
+              <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-card">
                 <div className="h-48 bg-gray-100" />
                 <div className="p-4 space-y-2 border-t border-black/[0.05]">
                   <div className="h-4 bg-gray-100 rounded w-3/4" />
@@ -80,7 +80,7 @@ export default function Offers() {
               <Link
                 key={p.id}
                 to={`/offers/${p.id}`}
-                className="group bg-white rounded-2xl overflow-hidden border border-black/[0.07] hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
+                className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200"
               >
                 <div className="h-52 bg-primary-light relative overflow-hidden flex items-center justify-center">
                   {p.image_url

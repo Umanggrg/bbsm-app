@@ -14,7 +14,7 @@ function ProductCard({ p }: { p: Product }) {
   return (
     <Link
       to={`/products/${p.id}`}
-      className="group bg-white rounded-2xl overflow-hidden border border-black/[0.07] hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 block"
+      className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200 block"
     >
       <div className="h-44 bg-cream flex items-center justify-center relative overflow-hidden">
         {p.image_url
@@ -42,7 +42,7 @@ function ProductCard({ p }: { p: Product }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden animate-pulse border border-black/[0.07]">
+    <div className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-card">
       <div className="h-44 bg-gray-100" />
       <div className="p-4 space-y-2.5 border-t border-black/[0.05]">
         <div className="h-3 bg-gray-100 rounded w-1/3" />
@@ -85,7 +85,7 @@ export default function Products() {
       <div className="border-b border-black/[0.07] bg-white">
         <div className="max-w-7xl mx-auto px-5 py-10">
           <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1.5">Browse</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-navy tracking-tight">Products</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-navy" style={{ letterSpacing: '-0.44px' }}>Products</h1>
           <p className="text-mid-gray mt-1.5 text-sm">
             {isLoading ? 'Loading…' : `${total.toLocaleString()} products across ${categories.length} categories`}
           </p>
@@ -117,12 +117,12 @@ export default function Products() {
           )}
         </div>
 
-        {/* Category chips */}
+        {/* Category chips — Airbnb horizontal scroll bar */}
         {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex gap-2 mb-8 overflow-x-auto -mx-5 px-5 pb-1 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setActiveCategory('')}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${!activeCategory ? 'bg-primary text-white' : 'bg-cream text-navy hover:bg-gray-200'}`}
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${!activeCategory ? 'bg-primary text-white shadow-card' : 'bg-cream text-navy hover:bg-gray-200'}`}
             >
               All
             </button>
@@ -130,7 +130,7 @@ export default function Products() {
               <button
                 key={c}
                 onClick={() => setActiveCategory(c === activeCategory ? '' : c)}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold capitalize transition-all ${activeCategory === c ? 'bg-primary text-white' : 'bg-cream text-navy hover:bg-gray-200'}`}
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold capitalize transition-all ${activeCategory === c ? 'bg-primary text-white shadow-card' : 'bg-cream text-navy hover:bg-gray-200'}`}
               >
                 {c}
               </button>
