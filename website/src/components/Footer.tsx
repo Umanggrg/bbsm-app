@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -14,10 +15,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-4">
             <div className="flex items-center gap-3 mb-5">
-              {/* Logo container — swap for <img> once logo.png is saved */}
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
-                <span className="text-white font-bold text-xs tracking-widest">BB</span>
-              </div>
+              <img src={logo} alt="BBSM Logo" className="w-10 h-10 object-contain shrink-0" />
               <div>
                 <p className="font-bold text-base tracking-wide">BBSM</p>
                 <p className="text-[10px] text-white/40 mt-0.5">Bhat-Bhateni Supermarket</p>

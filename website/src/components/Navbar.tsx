@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu, X, MapPin, Tag, Smartphone } from 'lucide-react';
 
-// Drop the image import path here once you save the logo:
-// import logo from '../assets/logo.png';
+import logo from '../assets/logo.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -53,11 +52,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0 group" onClick={() => setOpen(false)}>
-            {/* Logo image — replace the div below with <img src={logo} ... /> once saved */}
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center overflow-hidden shrink-0">
-              {/* <img src={logo} alt="BBSM Logo" className="w-full h-full object-contain" /> */}
-              <span className="text-white font-bold text-xs tracking-widest">BB</span>
-            </div>
+            <img src={logo} alt="BBSM Logo" className="w-10 h-10 object-contain shrink-0" />
             <div className="leading-none">
               <p className="font-bold text-navy text-base tracking-wide group-hover:text-primary transition-colors">BBSM</p>
               <p className="text-[10px] text-mid-gray tracking-wide mt-0.5">Bhat-Bhateni</p>
