@@ -19,7 +19,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col bg-cream">
+        <div className="min-h-screen flex flex-col bg-white">
           <Navbar />
           <main className="flex-1">
             <Routes>

@@ -1,96 +1,110 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, MapPin, Tag, Smartphone } from 'lucide-react';
+
+// Drop the image import path here once you save the logo:
+// import logo from '../assets/logo.png';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const links = [
     { to: '/products', label: 'Products' },
-    { to: '/offers', label: 'Offers' },
-    { to: '/stores', label: 'Stores' },
+    { to: '/offers', label: 'Weekly Deals' },
+    { to: '/stores', label: 'Find a Store' },
     { to: '/about', label: 'About' },
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm shadow-black/[0.06]'
-          : 'bg-white/90 backdrop-blur border-b border-black/[0.06]'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
-          <div className="relative w-9 h-9 rounded-xl overflow-hidden shrink-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary-dark" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-white font-bold text-xs tracking-widest drop-shadow-sm">BB</span>
-            </div>
+    <header className="sticky top-0 z-50 bg-white">
+      {/* ── Utility bar ───────────────────────────────────────────────── */}
+      <div className="bg-navy text-white">
+        <div className="max-w-7xl mx-auto px-5 h-9 flex items-center justify-between">
+          <p className="text-xs text-white/60 hidden sm:block">
+            Nepal's Largest Supermarket — 28 Stores Nationwide
+          </p>
+          <div className="flex items-center gap-5 ml-auto">
+            <Link to="/stores" className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors">
+              <MapPin size={11} />
+              Find a Store
+            </Link>
+            <Link to="/offers" className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors">
+              <Tag size={11} />
+              Weekly Ad
+            </Link>
+            <a href="https://apps.apple.com" className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors">
+              <Smartphone size={11} />
+              Get the App
+            </a>
           </div>
-          <div className="leading-none">
-            <p className="font-bold text-navy text-[15px] tracking-wide group-hover:text-primary transition-colors">
-              BBSM
-            </p>
-            <p className="text-[10px] text-gray-400 tracking-wide mt-0.5">Bhat-Bhateni</p>
-          </div>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `relative px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
-                  isActive
-                    ? 'text-primary bg-primary-light'
-                    : 'text-gray-500 hover:text-navy hover:bg-black/[0.04]'
-                }`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <a
-            href="https://apps.apple.com"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark active:scale-95 transition-all shadow-sm shadow-primary/30"
-          >
-            <ShoppingBag size={14} />
-            Download App
-          </a>
         </div>
+      </div>
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-black/[0.05] transition-colors"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={20} className="text-navy" /> : <Menu size={20} className="text-navy" />}
-        </button>
+      {/* ── Main navbar ───────────────────────────────────────────────── */}
+      <div className={`border-b border-black/[0.08] transition-shadow duration-200 ${scrolled ? 'shadow-sm' : ''}`}>
+        <div className="max-w-7xl mx-auto px-5 h-16 flex items-center gap-6">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 shrink-0 group" onClick={() => setOpen(false)}>
+            {/* Logo image — replace the div below with <img src={logo} ... /> once saved */}
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center overflow-hidden shrink-0">
+              {/* <img src={logo} alt="BBSM Logo" className="w-full h-full object-contain" /> */}
+              <span className="text-white font-bold text-xs tracking-widest">BB</span>
+            </div>
+            <div className="leading-none">
+              <p className="font-bold text-navy text-base tracking-wide group-hover:text-primary transition-colors">BBSM</p>
+              <p className="text-[10px] text-mid-gray tracking-wide mt-0.5">Bhat-Bhateni</p>
+            </div>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1 flex-1">
+            {links.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `px-4 py-2 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap ${
+                    isActive ? 'text-primary bg-primary-light' : 'text-navy hover:text-primary hover:bg-primary-lighter'
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-3 ml-auto shrink-0">
+            <a
+              href="https://apps.apple.com"
+              className="px-5 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark active:scale-95 transition-all"
+            >
+              Download App
+            </a>
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            className="md:hidden ml-auto p-2 rounded-lg hover:bg-cream transition-colors"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          open ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="bg-white border-t border-black/[0.06] px-5 py-4 flex flex-col gap-1">
+      <div className={`md:hidden overflow-hidden transition-all duration-300 bg-white border-b border-black/[0.08] ${open ? 'max-h-80' : 'max-h-0'}`}>
+        <div className="px-5 py-3 flex flex-col gap-1">
           {links.map(({ to, label }) => (
             <NavLink
               key={to}
@@ -98,9 +112,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
                 `px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
-                  isActive
-                    ? 'text-primary bg-primary-light'
-                    : 'text-gray-600 hover:text-navy hover:bg-black/[0.04]'
+                  isActive ? 'text-primary bg-primary-light' : 'text-navy hover:bg-cream'
                 }`
               }
             >
@@ -109,9 +121,8 @@ export default function Navbar() {
           ))}
           <a
             href="https://apps.apple.com"
-            className="mt-2 flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors shadow-sm"
+            className="mt-2 flex items-center justify-center px-4 py-3 bg-primary text-white text-sm font-bold rounded-xl"
           >
-            <ShoppingBag size={14} />
             Download App
           </a>
         </div>
