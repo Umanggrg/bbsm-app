@@ -80,8 +80,9 @@ export default function StoresScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
+        <Text style={styles.headerLabel}>28 LOCATIONS</Text>
         <Text style={[styles.headerTitle, isTablet && { fontSize: 28 }]}>Our Stores</Text>
-        <Text style={styles.headerSub}>{storeCount} of {STATIC_STORES.length} locations</Text>
+        <Text style={styles.headerSub}>{storeCount} of {STATIC_STORES.length} shown</Text>
       </View>
 
       {/* My store bar */}
@@ -257,10 +258,18 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
 
   header: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.textPrimary,
     paddingHorizontal: 20,
     paddingTop: 14,
     paddingBottom: 18,
+  },
+  headerLabel: {
+    fontFamily: 'Sora_700Bold',
+    fontSize: 10,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    marginBottom: 3,
   },
   headerTitle: {
     fontFamily: 'Sora_700Bold',
@@ -271,7 +280,7 @@ const styles = StyleSheet.create({
   headerSub: {
     fontFamily: 'Sora_400Regular',
     fontSize: 13,
-    color: 'rgba(255,255,255,0.68)',
+    color: 'rgba(255,255,255,0.5)',
     marginTop: 4,
   },
 

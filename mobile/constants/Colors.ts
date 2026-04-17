@@ -27,10 +27,10 @@ export const Colors = {
   accentLight: '#FBF3E0',
 
   // ── Apple iOS system colors ───────────────────────────────────────────────
-  background: '#F2F2F7',         // iOS grouped table background
+  background: '#F5F5F7',         // Website cream — Publix-style warm neutral
   surface: '#FFFFFF',             // Cards, sheets
   surfaceElevated: '#FFFFFF',
-  surfaceAlt: '#F2F2F7',
+  surfaceAlt: '#F5F5F7',
 
   textPrimary: '#1D1D1F',        // Apple label
   textSecondary: '#8E8E93',      // Apple secondary label

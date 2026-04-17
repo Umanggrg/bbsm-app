@@ -46,7 +46,7 @@ export default function HomeScreen() {
       <View style={[styles.header, { paddingHorizontal: hp }]}>
         <View>
           <Text style={[styles.logoText, isTablet && { fontSize: 30 }]}>BBSM</Text>
-          <Text style={styles.logoSub}>Bhat-Bhateni</Text>
+          <Text style={styles.logoSub}>Bhat-Bhateni Supermarket</Text>
         </View>
 
         <TouchableOpacity
@@ -54,11 +54,11 @@ export default function HomeScreen() {
           onPress={() => setStorePickerOpen(true)}
           activeOpacity={0.75}
         >
-          <Ionicons name="location-sharp" size={13} color="#fff" />
+          <Ionicons name="location-sharp" size={13} color={Colors.primary} />
           <Text style={styles.storePillText} numberOfLines={1}>
             {selectedStore ? selectedStore.name : 'Choose store'}
           </Text>
-          <Ionicons name="chevron-down" size={12} color="rgba(255,255,255,0.7)" />
+          <Ionicons name="chevron-down" size={12} color={Colors.textSecondary} />
         </TouchableOpacity>
       </View>
 
@@ -98,8 +98,8 @@ export default function HomeScreen() {
           <QuickAction
             icon="cart-outline"
             label="Shop"
-            color={Colors.orange}
-            bg={Colors.orangeLight}
+            color='#7C3AED'
+            bg='#F5F0FF'
             isTablet={isTablet}
             onPress={() => router.push('/(tabs)/shopping')}
           />
@@ -108,7 +108,10 @@ export default function HomeScreen() {
         {/* ── Latest Offers ─────────────────────────────────────────── */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, isTablet && { fontSize: 22 }]}>Latest Offers</Text>
+            <View>
+              <Text style={styles.sectionLabel}>THIS WEEK</Text>
+              <Text style={[styles.sectionTitle, isTablet && { fontSize: 22 }]}>Latest Offers</Text>
+            </View>
             <TouchableOpacity onPress={() => router.push('/(tabs)/offers')} activeOpacity={0.7}>
               <Text style={styles.seeAll}>See all</Text>
             </TouchableOpacity>
@@ -150,6 +153,7 @@ export default function HomeScreen() {
         {/* ── My Store card ─────────────────────────────────────────── */}
         {selectedStore && (
           <View style={styles.section}>
+            <Text style={styles.sectionLabel}>YOUR LOCATION</Text>
             <Text style={[styles.sectionTitle, isTablet && { fontSize: 22 }, { marginBottom: 12 }]}>
               My Store
             </Text>
@@ -212,11 +216,11 @@ function QuickAction({ icon, label, color, bg, isTablet, onPress }: QuickActionP
 // ── Styles ───────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.primary },
+  safe: { flex: 1, backgroundColor: Colors.background },
 
-  // Header
+  // Header — dark navy (Publix-style)
   header: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.textPrimary,
     paddingTop: 8,
     paddingBottom: 16,
     flexDirection: 'row',
@@ -232,26 +236,29 @@ const styles = StyleSheet.create({
   logoSub: {
     fontFamily: 'Sora_400Regular',
     fontSize: 10,
-    color: 'rgba(255,255,255,0.65)',
-    letterSpacing: 0.5,
+    color: 'rgba(255,255,255,0.5)',
+    letterSpacing: 0.3,
     marginTop: 1,
   },
   storePill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    backgroundColor: 'rgba(255,255,255,0.16)',
+    gap: 6,
+    backgroundColor: Colors.surface,
     borderRadius: 22,
     paddingHorizontal: 13,
     paddingVertical: 8,
     maxWidth: 190,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.25)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.10,
+    shadowRadius: 6,
+    elevation: 3,
   },
   storePillText: {
     fontFamily: 'Sora_600SemiBold',
     fontSize: 12,
-    color: '#fff',
+    color: Colors.textPrimary,
     flex: 1,
   },
 
@@ -310,6 +317,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 16,
+  },
+  sectionLabel: {
+    fontFamily: 'Sora_700Bold',
+    fontSize: 10,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    marginBottom: 2,
   },
   sectionTitle: {
     fontFamily: 'Sora_700Bold',

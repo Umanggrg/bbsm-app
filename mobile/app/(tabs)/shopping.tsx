@@ -141,7 +141,7 @@ const cardStyles = StyleSheet.create({
     shadowRadius: 14,
     elevation: 5,
   },
-  imgWrap: { backgroundColor: Colors.background, position: 'relative' },
+  imgWrap: { backgroundColor: '#F5F5F7', position: 'relative' },
   img: { width: '100%', height: '100%' },
   imgPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   badge: {
@@ -160,13 +160,13 @@ const cardStyles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
-  info: { padding: 12, gap: 4 },
+  info: { padding: 12, gap: 3 },
   category: {
-    fontFamily: 'Sora_600SemiBold',
-    fontSize: 10,
-    color: Colors.textSecondary,
+    fontFamily: 'Sora_700Bold',
+    fontSize: 9,
+    color: Colors.primary,
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
+    letterSpacing: 1.2,
   },
   name: {
     fontFamily: 'Sora_600SemiBold',
@@ -175,7 +175,15 @@ const cardStyles = StyleSheet.create({
     lineHeight: 18,
     letterSpacing: -0.1,
   },
-  priceRow: { flexDirection: 'row', alignItems: 'baseline', marginTop: 6, gap: 2 },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 2,
+    paddingTop: 8,
+    marginTop: 4,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(0,0,0,0.07)',
+  },
   price: { fontFamily: 'Sora_700Bold', fontSize: 15, color: Colors.primary, letterSpacing: -0.2 },
   unit: { fontFamily: 'Sora_400Regular', fontSize: 11, color: Colors.textSecondary },
 });
@@ -212,6 +220,7 @@ export default function ShoppingScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* ── Header ── */}
       <View style={styles.header}>
+        <Text style={styles.headerLabel}>BROWSE</Text>
         <Text style={styles.headerTitle}>Products</Text>
         {/* Search bar */}
         <View style={styles.searchBar}>
@@ -330,6 +339,14 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.border,
     gap: 12,
   },
+  headerLabel: {
+    fontFamily: 'Sora_700Bold',
+    fontSize: 10,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    paddingHorizontal: PADDING,
+  },
   headerTitle: {
     fontFamily: 'Sora_700Bold',
     fontSize: 30,
@@ -365,9 +382,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 24,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderLight,
+    borderColor: 'rgba(0,0,0,0.08)',
   },
   chipActive: {
     backgroundColor: Colors.primary,

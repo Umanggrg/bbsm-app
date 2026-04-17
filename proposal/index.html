@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BBSM Digital Platform — Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E07830;
+      --orange-dark: #B85F20;
+      --orange-light: #FFF2EA;
+      --black: #080808;
+      --dark: #1D1D1F;
+      --gray: #6E6E73;
+      --light: #F5F5F7;
+      --white: #FFFFFF;
+      --blue: #007AFF;
+      --green: #34C759;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Deck & Slides ─────────────────────────────────────────────── */
+    .deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 52px 64px;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1), transform 0.45s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .slide.prev   { opacity: 0; transform: translateX(-60px); }
+
+    /* backgrounds */
+    .bg-black    { background: var(--black); }
+    .bg-dark     { background: #111113; }
+    .bg-light    { background: var(--light); }
+    .bg-white    { background: #fff; }
+    .bg-orange   { background: linear-gradient(135deg, #E07830 0%, #B85F20 55%, #7A3D0E 100%); }
+    .bg-navy     { background: linear-gradient(145deg, #0a0a14 0%, #111130 100%); }
+
+    /* grid decoration */
+    .grid-bg {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    .glow {
+      position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+    }
+    .glow-orange { background: radial-gradient(circle, rgba(224,120,48,0.20) 0%, transparent 65%); }
+    .glow-blue   { background: radial-gradient(circle, rgba(0,122,255,0.12) 0%, transparent 65%); }
+
+    .z1 { position: relative; z-index: 1; }
+
+    /* ── Navigation ─────────────────────────────────────────────────── */
+    .nav {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 14px;
+      z-index: 999;
+    }
+
+    .nav-btn {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      color: rgba(255,255,255,0.85); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .dots { display: flex; gap: 6px; align-items: center; }
+    .dot {
+      width: 6px; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,0.28); cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .dot.active { width: 22px; background: var(--orange); }
+
+    .slide-num {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.3); min-width: 36px; text-align: center;
+    }
+
+    /* ── Typography ─────────────────────────────────────────────────── */
+    .label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .label-orange { color: var(--orange); }
+    .label-dim    { color: rgba(255,255,255,0.4); }
+    .label-gray   { color: var(--gray); }
+
+    h1 {
+      font-size: clamp(44px, 6.5vw, 80px);
+      font-weight: 900; letter-spacing: -2.5px; line-height: 1.0;
+    }
+    h2 {
+      font-size: clamp(30px, 4.2vw, 54px);
+      font-weight: 800; letter-spacing: -1.5px; line-height: 1.08;
+    }
+    h3 {
+      font-size: clamp(17px, 2vw, 24px);
+      font-weight: 700; letter-spacing: -0.44px; line-height: 1.2;
+    }
+    h4 {
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.2px; line-height: 1.3;
+    }
+
+    .c-white  { color: #fff; }
+    .c-orange { color: var(--orange); }
+    .c-dark   { color: var(--dark); }
+    .c-gray   { color: var(--gray); }
+    .c-dim    { color: rgba(255,255,255,0.45); }
+
+    .lead {
+      font-size: clamp(15px, 1.6vw, 18px);
+      line-height: 1.65; font-weight: 400;
+    }
+    .body-sm {
+      font-size: 13px; line-height: 1.6; font-weight: 400;
+    }
+
+    /* ── Layout helpers ─────────────────────────────────────────────── */
+    .content-sm  { max-width: 680px;  width: 100%; }
+    .content-md  { max-width: 900px;  width: 100%; }
+    .content-lg  { max-width: 1080px; width: 100%; }
+    .content-xl  { max-width: 1260px; width: 100%; }
+    .center      { text-align: center; align-items: center; }
+
+    .flex        { display: flex; }
+    .flex-col    { flex-direction: column; }
+    .items-c     { align-items: center; }
+    .items-s     { align-items: flex-start; }
+    .justify-b   { justify-content: space-between; }
+    .justify-c   { justify-content: center; }
+    .flex-wrap   { flex-wrap: wrap; }
+    .gap-8       { gap: 8px; }
+    .gap-12      { gap: 12px; }
+    .gap-16      { gap: 16px; }
+    .gap-20      { gap: 20px; }
+    .gap-24      { gap: 24px; }
+    .gap-32      { gap: 32px; }
+    .gap-48      { gap: 48px; }
+
+    .mb-4  { margin-bottom: 4px; }
+    .mb-8  { margin-bottom: 8px; }
+    .mb-12 { margin-bottom: 12px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-20 { margin-bottom: 20px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mb-32 { margin-bottom: 32px; }
+    .mb-40 { margin-bottom: 40px; }
+    .mb-48 { margin-bottom: 48px; }
+    .mt-8  { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr;         gap: 18px; width: 100%; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 18px; width: 100%; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr);  gap: 14px; width: 100%; }
+
+    /* ── Cards ──────────────────────────────────────────────────────── */
+    .card {
+      background: #fff; border-radius: 20px; padding: 26px;
+      box-shadow: rgba(0,0,0,0.02) 0 0 0 1px, rgba(0,0,0,0.05) 0 2px 8px, rgba(0,0,0,0.09) 0 6px 16px;
+    }
+    .card-dark {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 26px;
+    }
+    .card-orange-outline {
+      background: rgba(224,120,48,0.07);
+      border: 1px solid rgba(224,120,48,0.3);
+      border-radius: 20px; padding: 24px;
+    }
+    .card-glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 26px;
+      backdrop-filter: blur(20px);
+    }
+
+    /* ── Tags & Pills ───────────────────────────────────────────────── */
+    .tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 11px; border-radius: 7px;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .tag-orange { background: var(--orange); color: #fff; }
+    .tag-blue   { background: var(--blue);   color: #fff; }
+    .tag-green  { background: var(--green);  color: #fff; }
+    .tag-dim    { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.65); }
+    .tag-dark   { background: rgba(0,0,0,0.08); color: var(--dark); }
+    .tag-phase2 { background: rgba(0,122,255,0.15); color: #4DA3FF; border: 1px solid rgba(0,122,255,0.25); }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 600;
+    }
+    .pill-dark   { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.1); }
+    .pill-orange { background: var(--orange-light); color: var(--orange); }
+
+    /* ── Check items ────────────────────────────────────────────────── */
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 11px;
+      font-size: 14px; font-weight: 500; line-height: 1.5;
+    }
+    .check-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--orange); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; flex-shrink: 0; margin-top: 1px;
+      font-weight: 700;
+    }
+    .check-dot-dim {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; flex-shrink: 0; margin-top: 1px; font-weight: 700;
+    }
+
+    /* ── Stats ──────────────────────────────────────────────────────── */
+    .stat-num {
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 900; letter-spacing: -2px; line-height: 1;
+    }
+    .stat-label {
+      font-size: 13px; font-weight: 500; margin-top: 5px;
+    }
+
+    /* ── Icon box ───────────────────────────────────────────────────── */
+    .icon-box {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 16px; flex-shrink: 0;
+    }
+    .ib-orange { background: var(--orange-light); }
+    .ib-blue   { background: #EBF4FF; }
+    .ib-green  { background: #E8FAF0; }
+    .ib-dark   { background: rgba(255,255,255,0.08); }
+
+    /* ── Divider ────────────────────────────────────────────────────── */
+    .divider { width: 44px; height: 3px; background: var(--orange); border-radius: 2px; margin: 14px 0; }
+
+    /* ── Live dot ───────────────────────────────────────────────────── */
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(52,199,89,0.28);
+      animation: livepulse 2s infinite;
+      display: inline-block;
+    }
+    @keyframes livepulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(52,199,89,0.28); }
+      50%      { box-shadow: 0 0 0 7px rgba(52,199,89,0.08); }
+    }
+
+    /* ── Progress bar ───────────────────────────────────────────────── */
+    .pbar { width: 100%; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .pbar-fill { height: 100%; border-radius: 3px; background: var(--orange); }
+
+    /* ── Timeline ───────────────────────────────────────────────────── */
+    .tl-row { display: flex; align-items: flex-start; gap: 0; width: 100%; }
+    .tl-item { flex: 1; position: relative; }
+    .tl-line {
+      position: absolute; top: 20px; left: 56%;
+      width: 88%; height: 2px;
+      background: rgba(255,255,255,0.1); z-index: 0;
+    }
+    .tl-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px;
+      position: relative; z-index: 1;
+      margin-bottom: 14px;
+    }
+
+    /* ── Screen mockup ──────────────────────────────────────────────── */
+    .phone {
+      width: 190px; height: 380px;
+      background: #1c1c1e; border-radius: 34px;
+      border: 5px solid #2c2c2e;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.06);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .phone-notch {
+      width: 80px; height: 20px; background: #0a0a0a;
+      border-radius: 0 0 12px 12px;
+      margin: 0 auto;
+    }
+
+    /* ── Number step ────────────────────────────────────────────────── */
+    .step-num {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--orange); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0;
+    }
+
+    /* ── Phase badge ────────────────────────────────────────────────── */
+    .phase-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 999px;
+      font-size: 13px; font-weight: 700; margin-bottom: 22px;
+    }
+    .pb-1 { background: rgba(224,120,48,0.18); color: var(--orange); border: 1px solid rgba(224,120,48,0.3); }
+    .pb-2 { background: rgba(0,122,255,0.15); color: #4DA3FF; border: 1px solid rgba(0,122,255,0.3); }
+
+    /* ── Browser mockup ─────────────────────────────────────────────── */
+    .browser {
+      background: #1c1c1e; border-radius: 12px;
+      border: 3px solid #2c2c2e;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .browser-bar {
+      background: #2a2a2e; height: 34px;
+      display: flex; align-items: center; padding: 0 14px; gap: 7px;
+    }
+    .bd { width: 10px; height: 10px; border-radius: 50%; }
+  </style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 1 · COVER                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-black active" id="s1">
+    <div class="grid-bg"></div>
+    <div class="glow glow-orange" style="width:700px;height:700px;top:-200px;right:-100px;"></div>
+    <div class="glow glow-orange" style="width:400px;height:400px;bottom:-150px;left:-50px;opacity:.5;"></div>
+
+    <div class="z1 content-md center flex flex-col items-c">
+
+      <!-- live badge -->
+      <div class="pill pill-dark mb-32" style="gap:10px;">
+        <span class="live-dot"></span>
+        Live &amp; Deployed — Ready to Demo
+      </div>
+
+      <div class="label label-orange">Bhat-Bhateni Supermarket &amp; Department Store</div>
+
+      <h1 class="c-white mb-8" style="text-align:center;">
+        BBSM<br>
+        <span class="c-orange">Digital Platform</span>
+      </h1>
+
+      <p class="lead c-dim mb-40" style="max-width:520px;text-align:center;margin-top:20px;">
+        A complete digital ecosystem — website, mobile app, and admin dashboard — built for Nepal's largest supermarket chain.
+      </p>
+
+      <div class="flex gap-12 flex-wrap justify-c">
+        <div class="pill pill-dark">🌐 Website</div>
+        <div class="pill pill-dark">📱 Mobile App</div>
+        <div class="pill pill-dark">⚙️ Admin Dashboard</div>
+        <div class="pill pill-dark">☁️ Cloud Backend</div>
+      </div>
+
+      <p style="font-size:12px;color:rgba(255,255,255,0.18);margin-top:52px;font-weight:600;letter-spacing:1.5px;">
+        PROPOSAL · 2026 · PHASE 1
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 2 · THE OPPORTUNITY                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-dark" id="s2">
+    <div class="grid-bg"></div>
+
+    <div class="z1 content-xl">
+      <div class="label label-orange mb-16">The Opportunity</div>
+      <h2 class="c-white mb-12">Nepal's #1 supermarket.</h2>
+      <h2 style="color:rgba(255,255,255,0.28);margin-bottom:44px;letter-spacing:-1.5px;font-size:clamp(28px,4vw,50px);">No digital presence yet.</h2>
+
+      <div class="grid-3 mb-20">
+        <div class="card-dark">
+          <div class="stat-num c-white mb-4">28</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.5);">stores nationwide</div>
+          <p class="body-sm c-dim mt-8">All major cities — zero unified digital touchpoint connecting them.</p>
+        </div>
+        <div class="card-dark" style="border-color:rgba(224,120,48,0.3);background:rgba(224,120,48,0.06);">
+          <div class="stat-num c-orange mb-4">100K+</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.5);">daily customers</div>
+          <p class="body-sm c-dim mt-8">Visit BBSM every day with no way to engage digitally between visits.</p>
+        </div>
+        <div class="card-dark">
+          <div class="stat-num c-white mb-4">40+</div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.5);">years of trust</div>
+          <p class="body-sm c-dim mt-8">Since 1984, a household name. Now it's time to bring that legacy online.</p>
+        </div>
+      </div>
+
+      <div class="card-orange-outline">
+        <div class="flex items-c gap-16">
+          <div style="font-size:32px;flex-shrink:0;">📈</div>
+          <div>
+            <h4 class="c-white mb-4">Nepal's digital adoption is accelerating</h4>
+            <p class="body-sm c-dim">Smartphone penetration is growing rapidly. Customers increasingly expect to find brands online — browsing products, checking deals, and locating stores before they visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 3 · THE THREE PLATFORMS                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="s3">
+    <div class="z1 content-xl">
+      <div class="label label-gray mb-12 center">What's Been Built</div>
+      <h2 class="c-dark mb-8 center">Three platforms. One ecosystem.</h2>
+      <p class="lead c-gray mb-44 center" style="max-width:580px;margin-left:auto;margin-right:auto;">
+        A website, mobile app, and admin dashboard — all connected to the same backend, all live and working today.
+      </p>
+
+      <div class="grid-3 mb-20">
+        <div class="card" style="border-top:3px solid var(--orange);">
+          <div class="icon-box ib-orange">🌐</div>
+          <div class="tag tag-orange mb-12">Website</div>
+          <h3 class="c-dark mb-10">Customer Website</h3>
+          <p class="body-sm c-gray">Full product catalog, weekly promotions, store finder, user accounts, shopping lists, and newsletter. The public face of BBSM online.</p>
+          <div class="pbar mt-16"><div class="pbar-fill" style="width:85%;"></div></div>
+          <p style="font-size:11px;color:var(--gray);margin-top:6px;font-weight:600;">85% complete</p>
+        </div>
+
+        <div class="card" style="border-top:3px solid var(--blue);">
+          <div class="icon-box ib-blue">📱</div>
+          <div class="tag tag-blue mb-12">Mobile App</div>
+          <h3 class="c-dark mb-10">iOS &amp; Android App</h3>
+          <p class="body-sm c-gray">Native app with product discovery, deals, store finder, push notifications, barcode scanner, and shopping list. BBSM in every pocket.</p>
+          <div class="pbar mt-16"><div class="pbar-fill" style="width:80%;background:var(--blue);"></div></div>
+          <p style="font-size:11px;color:var(--gray);margin-top:6px;font-weight:600;">80% complete</p>
+        </div>
+
+        <div class="card" style="border-top:3px solid var(--green);">
+          <div class="icon-box ib-green">⚙️</div>
+          <div class="tag tag-green mb-12">Admin</div>
+          <h3 class="c-dark mb-10">Admin Dashboard</h3>
+          <p class="body-sm c-gray">Complete content management — products, promotions, stores, analytics, push notifications, role-based access, and reporting.</p>
+          <div class="pbar mt-16"><div class="pbar-fill" style="width:70%;background:var(--green);"></div></div>
+          <p style="font-size:11px;color:var(--gray);margin-top:6px;font-weight:600;">70% complete</p>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--dark);padding:18px 24px;">
+        <div class="flex items-c justify-b flex-wrap gap-16">
+          <p style="color:rgba(255,255,255,0.4);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Tech Stack</p>
+          <div class="flex gap-20 items-c flex-wrap">
+            <span style="color:#fff;font-size:13px;font-weight:600;">React</span>
+            <span style="color:rgba(255,255,255,0.2);">·</span>
+            <span style="color:#fff;font-size:13px;font-weight:600;">React Native / Expo</span>
+            <span style="color:rgba(255,255,255,0.2);">·</span>
+            <span style="color:#fff;font-size:13px;font-weight:600;">Node.js</span>
+            <span style="color:rgba(255,255,255,0.2);">·</span>
+            <span style="color:#fff;font-size:13px;font-weight:600;">PostgreSQL</span>
+            <span style="color:rgba(255,255,255,0.2);">·</span>
+            <span style="color:#fff;font-size:13px;font-weight:600;">Vercel</span>
+            <span style="color:rgba(255,255,255,0.2);">·</span>
+            <span style="color:#fff;font-size:13px;font-weight:600;">Tailwind CSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 4 · PHASE 1 — WHAT'S INCLUDED                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-black" id="s4">
+    <div class="grid-bg"></div>
+    <div class="glow glow-orange" style="width:500px;height:500px;top:-100px;left:-100px;opacity:.4;"></div>
+
+    <div class="z1 content-xl">
+      <div class="flex items-c justify-b mb-36">
+        <div>
+          <div class="phase-badge pb-1">● Phase 1</div>
+          <h2 class="c-white">Complete Digital Identity</h2>
+          <p class="lead c-dim mt-8" style="max-width:540px;">
+            Everything a customer needs to discover, browse, and engage with BBSM — and everything the business needs to manage it all.
+          </p>
+        </div>
+        <div class="card-glass" style="padding:24px 32px;text-align:center;flex-shrink:0;">
+          <div class="stat-num c-orange">12</div>
+          <div class="stat-label c-dim">feature areas</div>
+          <div style="margin-top:14px;width:120px;height:1px;background:rgba(255,255,255,0.08);"></div>
+          <div class="stat-num c-white mt-12" style="font-size:32px;">3</div>
+          <div class="stat-label c-dim">platforms</div>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">🛍️</div>
+          <h4 class="c-white mb-6">Product Catalog</h4>
+          <p class="body-sm c-dim">5,000+ products with search, filters, categories, and detail pages</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">🏷️</div>
+          <h4 class="c-white mb-6">Weekly Promotions</h4>
+          <p class="body-sm c-dim">Digital weekly ad — create, schedule, and publish deals instantly</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">📍</div>
+          <h4 class="c-white mb-6">Store Finder</h4>
+          <p class="body-sm c-dim">All 28 stores with hours, address, map, and services info</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">👤</div>
+          <h4 class="c-white mb-6">User Accounts</h4>
+          <p class="body-sm c-dim">Register, login, save favourites, and manage shopping lists</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">🔔</div>
+          <h4 class="c-white mb-6">Push Notifications</h4>
+          <p class="body-sm c-dim">Broadcast new deals, weekly ads, and store updates to all app users</p>
+        </div>
+        <div class="card-dark" style="border-color:rgba(224,120,48,0.3);background:rgba(224,120,48,0.06);">
+          <div style="font-size:22px;margin-bottom:10px;">📊</div>
+          <h4 class="c-orange mb-6">Analytics Dashboard</h4>
+          <p class="body-sm c-dim">Real-time views, clicks, popular products, and promo performance</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">🖼️</div>
+          <h4 class="c-white mb-6">Media Management</h4>
+          <p class="body-sm c-dim">Direct image upload and CDN delivery for all products and promos</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:22px;margin-bottom:10px;">🔐</div>
+          <h4 class="c-white mb-6">Security &amp; Auth</h4>
+          <p class="body-sm c-dim">JWT auth, rate limiting, input validation, role-based access control</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 5 · CUSTOMER WEBSITE                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="s5">
+    <div class="z1 content-xl">
+      <div class="flex gap-48 items-c">
+
+        <!-- left: features -->
+        <div style="flex:1;">
+          <div class="tag tag-orange mb-20">Customer Website</div>
+          <h2 class="c-dark mb-8">The customer-facing website.</h2>
+          <p class="lead c-gray mb-32" style="max-width:440px;">
+            A fast, beautiful website where any customer can discover BBSM, browse products, and find their nearest store.
+          </p>
+
+          <div class="grid-2" style="gap:12px;">
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">🔍</div>
+              <h4 class="c-dark mb-4">Smart Product Search</h4>
+              <p class="body-sm c-gray">Autocomplete, filters, category browse, and product detail pages</p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">📋</div>
+              <h4 class="c-dark mb-4">Shopping List</h4>
+              <p class="body-sm c-gray">Save products to a list and bring it to any BBSM store</p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">❤️</div>
+              <h4 class="c-dark mb-4">Favourites</h4>
+              <p class="body-sm c-gray">Heart products, access them anytime from your account</p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">📰</div>
+              <h4 class="c-dark mb-4">Newsletter Signup</h4>
+              <p class="body-sm c-gray">Direct marketing channel — weekly ad delivered to inbox</p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">🗺️</div>
+              <h4 class="c-dark mb-4">Store Pages</h4>
+              <p class="body-sm c-gray">Each store gets its own page — hours, photos, services, map</p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:20px;margin-bottom:8px;">🔎</div>
+              <h4 class="c-dark mb-4">SEO Optimised</h4>
+              <p class="body-sm c-gray">Meta tags, structured data, sitemaps — discoverable on Google</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- right: browser mockup -->
+        <div style="flex-shrink:0;width:340px;">
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="bd" style="background:#FF5F57;"></div>
+              <div class="bd" style="background:#FFBD2E;"></div>
+              <div class="bd" style="background:#28C840;"></div>
+              <div style="flex:1;background:#3a3a3e;border-radius:6px;height:18px;margin-left:8px;display:flex;align-items:center;padding:0 10px;">
+                <span style="font-size:10px;color:rgba(255,255,255,0.3);">bbsm.com.np</span>
+              </div>
+            </div>
+            <!-- fake website content -->
+            <div style="background:#fff;padding:0;">
+              <div style="background:#E07830;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <div style="width:48px;height:8px;background:rgba(255,255,255,0.9);border-radius:4px;"></div>
+                  <div style="width:32px;height:5px;background:rgba(255,255,255,0.4);border-radius:3px;margin-top:3px;"></div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <div style="width:38px;height:20px;background:rgba(255,255,255,0.15);border-radius:10px;"></div>
+                  <div style="width:38px;height:20px;background:rgba(255,255,255,0.15);border-radius:10px;"></div>
+                  <div style="width:48px;height:20px;background:rgba(255,255,255,0.9);border-radius:10px;"></div>
+                </div>
+              </div>
+              <div style="padding:14px;background:linear-gradient(135deg,#E07830,#B85F20);height:90px;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;">
+                <div style="width:70%;height:10px;background:rgba(255,255,255,0.9);border-radius:5px;"></div>
+                <div style="width:45%;height:7px;background:rgba(255,255,255,0.5);border-radius:4px;"></div>
+                <div style="display:flex;gap:6px;margin-top:4px;">
+                  <div style="width:60px;height:18px;background:#fff;border-radius:9px;"></div>
+                  <div style="width:60px;height:18px;background:rgba(255,255,255,0.2);border-radius:9px;border:1px solid rgba(255,255,255,0.3);"></div>
+                </div>
+              </div>
+              <div style="padding:12px;background:#F5F5F7;">
+                <div style="display:flex;gap:6px;margin-bottom:10px;overflow:hidden;">
+                  <div style="width:50px;height:20px;background:#E07830;border-radius:10px;"></div>
+                  <div style="width:60px;height:20px;background:#fff;border-radius:10px;"></div>
+                  <div style="width:55px;height:20px;background:#fff;border-radius:10px;"></div>
+                  <div style="width:45px;height:20px;background:#fff;border-radius:10px;"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+                  <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="height:52px;background:#FFF2EA;"></div>
+                    <div style="padding:7px;">
+                      <div style="width:80%;height:5px;background:#eee;border-radius:3px;margin-bottom:4px;"></div>
+                      <div style="width:50%;height:6px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                    </div>
+                  </div>
+                  <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="height:52px;background:#EBF4FA;"></div>
+                    <div style="padding:7px;">
+                      <div style="width:80%;height:5px;background:#eee;border-radius:3px;margin-bottom:4px;"></div>
+                      <div style="width:50%;height:6px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                    </div>
+                  </div>
+                  <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="height:52px;background:#FFF2EA;"></div>
+                    <div style="padding:7px;">
+                      <div style="width:80%;height:5px;background:#eee;border-radius:3px;margin-bottom:4px;"></div>
+                      <div style="width:50%;height:6px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--gray);text-align:center;margin-top:12px;font-weight:600;letter-spacing:0.5px;">Live at bbsm-website.vercel.app</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 6 · MOBILE APP                                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-navy" id="s6">
+    <div class="grid-bg"></div>
+    <div class="glow glow-blue" style="width:600px;height:600px;top:-100px;right:-100px;"></div>
+
+    <div class="z1 content-xl">
+      <div class="flex gap-48 items-c">
+
+        <!-- phone mockups -->
+        <div style="display:flex;gap:16px;flex-shrink:0;align-items:flex-end;">
+          <!-- phone 1: home -->
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div style="background:#E07830;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="width:40px;height:7px;background:rgba(255,255,255,0.9);border-radius:4px;"></div>
+                <div style="width:28px;height:5px;background:rgba(255,255,255,0.4);border-radius:3px;margin-top:3px;"></div>
+              </div>
+              <div style="width:90px;height:22px;background:rgba(255,255,255,0.15);border-radius:11px;"></div>
+            </div>
+            <div style="background:#F2F2F7;padding:14px;flex:1;">
+              <div style="width:120px;height:10px;background:#1D1D1F;border-radius:5px;margin-bottom:5px;"></div>
+              <div style="width:80px;height:7px;background:#8E8E93;border-radius:4px;margin-bottom:16px;"></div>
+              <div style="display:flex;gap:10px;margin-bottom:16px;">
+                <div style="flex:1;background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#FFF2EA;margin:0 auto 6px;"></div>
+                  <div style="width:40px;height:6px;background:#8E8E93;border-radius:3px;margin:0 auto;"></div>
+                </div>
+                <div style="flex:1;background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#EBF4FA;margin:0 auto 6px;"></div>
+                  <div style="width:40px;height:6px;background:#8E8E93;border-radius:3px;margin:0 auto;"></div>
+                </div>
+                <div style="flex:1;background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                  <div style="width:32px;height:32px;border-radius:50%;background:#FFF2EA;margin:0 auto 6px;"></div>
+                  <div style="width:40px;height:6px;background:#8E8E93;border-radius:3px;margin:0 auto;"></div>
+                </div>
+              </div>
+              <div style="width:90px;height:8px;background:#1D1D1F;border-radius:4px;margin-bottom:10px;"></div>
+              <div style="background:#fff;border-radius:16px;height:130px;box-shadow:0 3px 12px rgba(0,0,0,0.1);overflow:hidden;">
+                <div style="height:90px;background:linear-gradient(135deg,#E07830,#B85F20);"></div>
+                <div style="padding:8px 10px;">
+                  <div style="width:70%;height:6px;background:#eee;border-radius:3px;"></div>
+                </div>
+              </div>
+            </div>
+            <div style="height:52px;background:#fff;border-top:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-around;padding:0 8px;">
+              <div style="width:28px;height:28px;background:#FFF2EA;border-radius:50%;"></div>
+              <div style="width:28px;height:28px;background:#f5f5f7;border-radius:50%;"></div>
+              <div style="width:28px;height:28px;background:#f5f5f7;border-radius:50%;"></div>
+              <div style="width:28px;height:28px;background:#f5f5f7;border-radius:50%;"></div>
+            </div>
+          </div>
+
+          <!-- phone 2: shopping (slightly elevated) -->
+          <div class="phone" style="margin-bottom:24px;">
+            <div class="phone-notch"></div>
+            <div style="background:#fff;padding:14px;">
+              <div style="width:100px;height:12px;background:#1D1D1F;border-radius:6px;margin-bottom:10px;letter-spacing:-0.44px;"></div>
+              <div style="background:#F2F2F7;border-radius:12px;height:36px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:12px;">
+                <div style="width:14px;height:14px;background:#8E8E93;border-radius:50%;"></div>
+                <div style="width:100px;height:7px;background:#C7C7CC;border-radius:4px;"></div>
+              </div>
+              <div style="display:flex;gap:7px;margin-bottom:12px;overflow:hidden;">
+                <div style="width:44px;height:24px;background:#E07830;border-radius:12px;flex-shrink:0;"></div>
+                <div style="width:52px;height:24px;background:#F2F2F7;border-radius:12px;flex-shrink:0;"></div>
+                <div style="width:48px;height:24px;background:#F2F2F7;border-radius:12px;flex-shrink:0;"></div>
+                <div style="width:44px;height:24px;background:#F2F2F7;border-radius:12px;flex-shrink:0;"></div>
+              </div>
+            </div>
+            <div style="background:#F2F2F7;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;">
+              <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.09);">
+                <div style="height:80px;background:#FFF2EA;"></div>
+                <div style="padding:9px;">
+                  <div style="width:80%;height:6px;background:#eee;border-radius:3px;margin-bottom:5px;"></div>
+                  <div style="width:50%;height:7px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.09);">
+                <div style="height:80px;background:#EBF4FA;"></div>
+                <div style="padding:9px;">
+                  <div style="width:80%;height:6px;background:#eee;border-radius:3px;margin-bottom:5px;"></div>
+                  <div style="width:50%;height:7px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.09);">
+                <div style="height:80px;background:#FFF2EA;"></div>
+                <div style="padding:9px;">
+                  <div style="width:80%;height:6px;background:#eee;border-radius:3px;margin-bottom:5px;"></div>
+                  <div style="width:50%;height:7px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.09);">
+                <div style="height:80px;background:#E8FAF0;"></div>
+                <div style="padding:9px;">
+                  <div style="width:80%;height:6px;background:#eee;border-radius:3px;margin-bottom:5px;"></div>
+                  <div style="width:50%;height:7px;background:#E07830;border-radius:3px;opacity:.7;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- right: features -->
+        <div style="flex:1;">
+          <div class="tag tag-blue mb-20">Mobile App · iOS &amp; Android</div>
+          <h2 class="c-white mb-8">The iOS &amp; Android app.</h2>
+          <p class="lead c-dim mb-28" style="max-width:440px;">
+            A native app customers can download, browse products, discover deals, and find stores — on any phone, any screen size.
+          </p>
+
+          <ul class="check-list">
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Product catalog with search, categories &amp; filters</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Weekly deals + offer detail pages</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Store finder with map, hours &amp; directions</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Shopping list — save products, bring to store</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Push notifications for deals &amp; weekly ad</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Barcode scanner — scan in-store, see full details</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Onboarding flow for new users</span></li>
+            <li><div class="check-dot-dim">✓</div><span class="c-white">Fully responsive — phone &amp; tablet</span></li>
+          </ul>
+
+          <div class="flex gap-8 mt-24">
+            <div class="pill pill-dark" style="font-size:12px;">React Native</div>
+            <div class="pill pill-dark" style="font-size:12px;">Expo SDK 54</div>
+            <div class="pill pill-dark" style="font-size:12px;">iOS + Android</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 7 · ADMIN DASHBOARD                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="s7">
+    <div class="z1 content-xl">
+      <div class="flex gap-48 items-c">
+
+        <div style="flex:1;">
+          <div class="tag tag-green mb-20">Admin Dashboard</div>
+          <h2 class="c-dark mb-8">The admin dashboard.</h2>
+          <p class="lead c-gray mb-28" style="max-width:420px;">
+            A dedicated web dashboard for the BBSM team to manage every piece of content that customers see — in real time.
+          </p>
+
+          <div class="flex flex-col gap-12">
+            <div class="card" style="padding:16px 20px;display:flex;gap:14px;align-items:flex-start;">
+              <div style="font-size:20px;flex-shrink:0;margin-top:2px;">📦</div>
+              <div>
+                <h4 class="c-dark mb-3">Product Management</h4>
+                <p class="body-sm c-gray">Full CRUD, bulk CSV upload for thousands of products, image upload, category management</p>
+              </div>
+            </div>
+            <div class="card" style="padding:16px 20px;display:flex;gap:14px;align-items:flex-start;">
+              <div style="font-size:20px;flex-shrink:0;margin-top:2px;">📣</div>
+              <div>
+                <h4 class="c-dark mb-3">Promotions &amp; Weekly Ad</h4>
+                <p class="body-sm c-gray">Create, schedule, publish/unpublish deals — changes go live instantly across website and app</p>
+              </div>
+            </div>
+            <div class="card" style="padding:16px 20px;display:flex;gap:14px;align-items:flex-start;">
+              <div style="font-size:20px;flex-shrink:0;margin-top:2px;">📊</div>
+              <div>
+                <h4 class="c-dark mb-3">Analytics &amp; Reporting</h4>
+                <p class="body-sm c-gray">Page views, product clicks, promo performance, top searches — exportable CSV reports</p>
+              </div>
+            </div>
+            <div class="card" style="padding:16px 20px;display:flex;gap:14px;align-items:flex-start;">
+              <div style="font-size:20px;flex-shrink:0;margin-top:2px;">🔔</div>
+              <div>
+                <h4 class="c-dark mb-3">Push Notification Sender</h4>
+                <p class="body-sm c-gray">Compose and broadcast messages to all app users — new deals, store updates, announcements</p>
+              </div>
+            </div>
+            <div class="card" style="padding:16px 20px;display:flex;gap:14px;align-items:flex-start;">
+              <div style="font-size:20px;flex-shrink:0;margin-top:2px;">👥</div>
+              <div>
+                <h4 class="c-dark mb-3">Role-Based Access</h4>
+                <p class="body-sm c-gray">Store manager, regional manager, corporate admin — different access levels per role</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- admin mockup -->
+        <div style="flex-shrink:0;width:380px;">
+          <div class="browser">
+            <div class="browser-bar">
+              <div class="bd" style="background:#FF5F57;"></div>
+              <div class="bd" style="background:#FFBD2E;"></div>
+              <div class="bd" style="background:#28C840;"></div>
+              <div style="flex:1;background:#3a3a3e;border-radius:6px;height:18px;margin-left:8px;"></div>
+            </div>
+            <div style="display:flex;height:260px;">
+              <!-- sidebar -->
+              <div style="width:80px;background:#1D1D1F;padding:12px 8px;display:flex;flex-direction:column;gap:4px;">
+                <div style="width:100%;height:10px;background:rgba(255,255,255,0.6);border-radius:5px;margin-bottom:12px;"></div>
+                <div style="width:100%;height:28px;background:#E07830;border-radius:8px;display:flex;align-items:center;padding:0 8px;gap:5px;">
+                  <div style="width:12px;height:12px;background:rgba(255,255,255,0.8);border-radius:50%;"></div>
+                  <div style="width:28px;height:5px;background:rgba(255,255,255,0.8);border-radius:3px;"></div>
+                </div>
+                <div style="width:100%;height:28px;background:rgba(255,255,255,0.05);border-radius:8px;display:flex;align-items:center;padding:0 8px;gap:5px;">
+                  <div style="width:12px;height:12px;background:rgba(255,255,255,0.25);border-radius:50%;"></div>
+                  <div style="width:28px;height:5px;background:rgba(255,255,255,0.25);border-radius:3px;"></div>
+                </div>
+                <div style="width:100%;height:28px;background:rgba(255,255,255,0.05);border-radius:8px;display:flex;align-items:center;padding:0 8px;gap:5px;">
+                  <div style="width:12px;height:12px;background:rgba(255,255,255,0.25);border-radius:50%;"></div>
+                  <div style="width:28px;height:5px;background:rgba(255,255,255,0.25);border-radius:3px;"></div>
+                </div>
+                <div style="width:100%;height:28px;background:rgba(255,255,255,0.05);border-radius:8px;display:flex;align-items:center;padding:0 8px;gap:5px;">
+                  <div style="width:12px;height:12px;background:rgba(255,255,255,0.25);border-radius:50%;"></div>
+                  <div style="width:28px;height:5px;background:rgba(255,255,255,0.25);border-radius:3px;"></div>
+                </div>
+              </div>
+              <!-- main -->
+              <div style="flex:1;background:#F5F5F7;padding:14px;">
+                <div style="width:80px;height:9px;background:#1D1D1F;border-radius:5px;margin-bottom:14px;"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+                  <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+                    <div style="width:32px;height:32px;background:#FFF2EA;border-radius:10px;margin-bottom:8px;"></div>
+                    <div style="width:30px;height:14px;background:#1D1D1F;border-radius:4px;margin-bottom:4px;"></div>
+                    <div style="width:60px;height:7px;background:#8E8E93;border-radius:4px;"></div>
+                  </div>
+                  <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+                    <div style="width:32px;height:32px;background:#E8FAF0;border-radius:10px;margin-bottom:8px;"></div>
+                    <div style="width:30px;height:14px;background:#1D1D1F;border-radius:4px;margin-bottom:4px;"></div>
+                    <div style="width:60px;height:7px;background:#8E8E93;border-radius:4px;"></div>
+                  </div>
+                </div>
+                <!-- table -->
+                <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.07);overflow:hidden;">
+                  <div style="background:#F5F5F7;padding:8px 12px;display:flex;gap:20px;">
+                    <div style="width:50px;height:6px;background:#C7C7CC;border-radius:3px;"></div>
+                    <div style="width:40px;height:6px;background:#C7C7CC;border-radius:3px;"></div>
+                    <div style="width:36px;height:6px;background:#C7C7CC;border-radius:3px;"></div>
+                  </div>
+                  <div style="padding:8px 12px;border-bottom:1px solid #f0f0f0;display:flex;gap:20px;align-items:center;">
+                    <div style="width:50px;height:6px;background:#1D1D1F;border-radius:3px;"></div>
+                    <div style="width:40px;height:6px;background:#8E8E93;border-radius:3px;"></div>
+                    <div style="width:36px;height:18px;background:#E07830;border-radius:6px;"></div>
+                  </div>
+                  <div style="padding:8px 12px;display:flex;gap:20px;align-items:center;">
+                    <div style="width:50px;height:6px;background:#1D1D1F;border-radius:3px;"></div>
+                    <div style="width:40px;height:6px;background:#8E8E93;border-radius:3px;"></div>
+                    <div style="width:36px;height:18px;background:#E8FAF0;border-radius:6px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--gray);text-align:center;margin-top:12px;font-weight:600;letter-spacing:0.5px;">Live at bbsm-admin.vercel.app</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 8 · BACKEND & SECURITY                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-dark" id="s8">
+    <div class="grid-bg"></div>
+
+    <div class="z1 content-xl">
+      <div class="label label-orange mb-16">Infrastructure &amp; Security</div>
+      <h2 class="c-white mb-8">Production-grade infrastructure.</h2>
+      <p class="lead c-dim mb-40" style="max-width:600px;">
+        The backend runs on Vercel serverless with Neon PostgreSQL — secure, scalable, and already handling live traffic.
+      </p>
+
+      <div class="grid-4 mb-20">
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🔐</div>
+          <h4 class="c-white mb-6">Authentication</h4>
+          <p class="body-sm c-dim">JWT + refresh tokens, bcrypt password hashing, session management</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🛡️</div>
+          <h4 class="c-white mb-6">API Security</h4>
+          <p class="body-sm c-dim">Rate limiting, input sanitisation, SQL injection prevention, CORS</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🖼️</div>
+          <h4 class="c-white mb-6">Image CDN</h4>
+          <p class="body-sm c-dim">Cloudinary for direct upload, auto-resize, and fast global delivery</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🔍</div>
+          <h4 class="c-white mb-6">Full-text Search</h4>
+          <p class="body-sm c-dim">PostgreSQL full-text search with typo tolerance across 5,000+ products</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">📧</div>
+          <h4 class="c-white mb-6">Email Service</h4>
+          <p class="body-sm c-dim">Welcome emails, weekly ad newsletter, account notifications via Resend</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">⚡</div>
+          <h4 class="c-white mb-6">Performance</h4>
+          <p class="body-sm c-dim">Vercel edge network, query caching, lazy loading, optimised bundles</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🌍</div>
+          <h4 class="c-white mb-6">Global CDN</h4>
+          <p class="body-sm c-dim">Deployed on Vercel's global edge — fast for users anywhere in Nepal</p>
+        </div>
+        <div class="card-dark">
+          <div style="font-size:24px;margin-bottom:12px;">🐞</div>
+          <h4 class="c-white mb-6">Monitoring</h4>
+          <p class="body-sm c-dim">Error tracking, uptime monitoring, and alerting via Sentry + Vercel Analytics</p>
+        </div>
+      </div>
+
+      <div class="flex gap-16 flex-wrap">
+        <div class="flex items-c gap-8">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+          <span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">API deployed &amp; live</span>
+        </div>
+        <div class="flex items-c gap-8">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+          <span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">Neon PostgreSQL connected</span>
+        </div>
+        <div class="flex items-c gap-8">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+          <span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">HTTPS everywhere</span>
+        </div>
+        <div class="flex items-c gap-8">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+          <span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;">REST API with versioning (/v1)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 9 · PHASE 2 PREVIEW                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-black" id="s9">
+    <div class="grid-bg"></div>
+    <div class="glow glow-blue" style="width:700px;height:700px;bottom:-200px;right:-150px;opacity:.6;"></div>
+
+    <div class="z1 content-xl">
+      <div class="flex items-c gap-48">
+
+        <div style="flex:1;">
+          <div class="phase-badge pb-2 mb-20">◎ Phase 2 — Coming Next</div>
+          <h2 class="c-white mb-8">Online Shopping.</h2>
+          <p class="lead c-dim mb-36" style="max-width:480px;">
+            Built on top of Phase 1's digital identity, Phase 2 turns BBSM into a full e-commerce platform — with Click &amp; Collect, payments, and order management.
+          </p>
+
+          <div class="flex flex-col gap-12">
+            <div class="card-dark" style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;">
+              <div class="step-num" style="flex-shrink:0;background:#007AFF;">1</div>
+              <div>
+                <h4 class="c-white mb-4">Cart &amp; Checkout</h4>
+                <p class="body-sm c-dim">Full cart system with quantity management, coupons, and a smooth checkout flow</p>
+              </div>
+            </div>
+            <div class="card-dark" style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;">
+              <div class="step-num" style="flex-shrink:0;background:#5856D6;">2</div>
+              <div>
+                <h4 class="c-white mb-4">Local Payments — eSewa &amp; Khalti</h4>
+                <p class="body-sm c-dim">Integrate Nepal's most-used payment gateways plus card payments</p>
+              </div>
+            </div>
+            <div class="card-dark" style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;">
+              <div class="step-num" style="flex-shrink:0;background:#30B0C7;">3</div>
+              <div>
+                <h4 class="c-white mb-4">Click &amp; Collect</h4>
+                <p class="body-sm c-dim">Order online, choose a store, pick up your order — no delivery needed</p>
+              </div>
+            </div>
+            <div class="card-dark" style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;">
+              <div class="step-num" style="flex-shrink:0;background:#34C759;">4</div>
+              <div>
+                <h4 class="c-white mb-4">Order Management &amp; Tracking</h4>
+                <p class="body-sm c-dim">Admin processes orders per store; customers track status in real time</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- phase 2 visual -->
+        <div style="flex-shrink:0;width:300px;display:flex;flex-direction:column;gap:14px;">
+          <div class="card-dark" style="border-color:rgba(0,122,255,0.3);background:rgba(0,122,255,0.06);padding:22px;text-align:center;">
+            <div style="font-size:40px;margin-bottom:10px;">🛒</div>
+            <h3 class="c-white mb-6">Cart &amp; Checkout</h3>
+            <p class="body-sm c-dim">Add to cart, apply coupons, review order, pay</p>
+          </div>
+          <div class="card-dark" style="padding:22px;text-align:center;">
+            <div style="font-size:40px;margin-bottom:10px;">📦</div>
+            <h3 class="c-white mb-6">Order Status</h3>
+            <p class="body-sm c-dim">"Ready for pickup" push notification when order is prepared</p>
+          </div>
+          <div class="card-dark" style="padding:22px;display:flex;gap:12px;align-items:center;">
+            <div style="font-size:28px;">💳</div>
+            <div>
+              <h4 class="c-white mb-3">Payment Methods</h4>
+              <div class="flex gap-6 flex-wrap">
+                <div class="tag tag-phase2">eSewa</div>
+                <div class="tag tag-phase2">Khalti</div>
+                <div class="tag tag-phase2">Card</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 10 · ROADMAP                                      -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-dark" id="s10">
+    <div class="grid-bg"></div>
+
+    <div class="z1 content-xl">
+      <div class="label label-orange mb-16 center">Project Roadmap</div>
+      <h2 class="c-white mb-8 center">A phased plan — digital identity first, shopping next.</h2>
+      <p class="lead c-dim mb-48 center" style="max-width:560px;margin-left:auto;margin-right:auto;">
+        A clear, phased approach — Phase 1 delivers the full digital identity, Phase 2 adds commerce.
+      </p>
+
+      <div class="grid-2 gap-24">
+
+        <!-- Phase 1 -->
+        <div style="border:1px solid rgba(224,120,48,0.3);border-radius:24px;padding:28px;background:rgba(224,120,48,0.05);">
+          <div class="flex items-c gap-12 mb-20">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;">1</div>
+            <div>
+              <div class="tag tag-orange mb-4">Phase 1 · In Progress</div>
+              <h3 class="c-white">Digital Identity</h3>
+            </div>
+          </div>
+          <ul class="check-list">
+            <li><div class="check-dot">✓</div><span class="c-white">Product catalog — website &amp; app</span></li>
+            <li><div class="check-dot">✓</div><span class="c-white">Weekly promotions system</span></li>
+            <li><div class="check-dot">✓</div><span class="c-white">Store finder — all 28 locations</span></li>
+            <li><div class="check-dot">✓</div><span class="c-white">Admin dashboard — products, promos, stores</span></li>
+            <li><div class="check-dot">✓</div><span class="c-white">Cloud backend + REST API</span></li>
+            <li><div class="check-dot" style="background:rgba(224,120,48,0.4);">→</div><span style="color:rgba(255,255,255,0.6);">User accounts &amp; favourites</span></li>
+            <li><div class="check-dot" style="background:rgba(224,120,48,0.4);">→</div><span style="color:rgba(255,255,255,0.6);">Push notifications</span></li>
+            <li><div class="check-dot" style="background:rgba(224,120,48,0.4);">→</div><span style="color:rgba(255,255,255,0.6);">Analytics dashboard</span></li>
+            <li><div class="check-dot" style="background:rgba(224,120,48,0.4);">→</div><span style="color:rgba(255,255,255,0.6);">Image CDN + media upload</span></li>
+            <li><div class="check-dot" style="background:rgba(224,120,48,0.4);">→</div><span style="color:rgba(255,255,255,0.6);">Role-based admin access</span></li>
+          </ul>
+        </div>
+
+        <!-- Phase 2 -->
+        <div style="border:1px solid rgba(0,122,255,0.25);border-radius:24px;padding:28px;background:rgba(0,122,255,0.04);">
+          <div class="flex items-c gap-12 mb-20">
+            <div style="width:44px;height:44px;border-radius:50%;background:#007AFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;">2</div>
+            <div>
+              <div class="tag tag-phase2 mb-4">Phase 2 · Planned</div>
+              <h3 class="c-white">Online Shopping</h3>
+            </div>
+          </div>
+          <ul class="check-list">
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Cart &amp; checkout flow</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">eSewa &amp; Khalti payment integration</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Click &amp; Collect — order online, pick up in store</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Order management in admin</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Order status &amp; push notifications</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Inventory sync — real-time stock levels</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Digital coupons &amp; promo codes</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Order history &amp; reorder</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Delivery partner integration (optional)</span></li>
+            <li><div class="check-dot" style="background:rgba(0,122,255,0.5);">→</div><span style="color:rgba(255,255,255,0.65);">Advanced analytics &amp; revenue dashboard</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 11 · WHY BBSM NEEDS THIS NOW                      -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-light" id="s11">
+    <div class="z1 content-lg">
+      <div class="label label-gray mb-16 center">Why This Matters</div>
+      <h2 class="c-dark mb-40 center" style="max-width:700px;margin-left:auto;margin-right:auto;">
+        What a digital presence<br>
+        <span class="c-orange">actually enables for BBSM.</span>
+      </h2>
+
+      <div class="grid-3 mb-24">
+        <div class="card" style="text-align:center;padding:32px 24px;">
+          <div style="font-size:40px;margin-bottom:16px;">📱</div>
+          <h3 class="c-dark mb-10">Customers Expect Digital</h3>
+          <p class="body-sm c-gray">Customers look up stores, check prices, and browse deals online before visiting. A digital presence makes that possible for BBSM.</p>
+        </div>
+        <div class="card" style="text-align:center;padding:32px 24px;border:2px solid var(--orange);">
+          <div style="font-size:40px;margin-bottom:16px;">📈</div>
+          <h3 class="c-orange mb-10">Direct Customer Channel</h3>
+          <p class="body-sm c-gray">An app gives BBSM a way to communicate directly with customers — push weekly deals, new arrivals, and store updates without relying on print or third-party channels.</p>
+        </div>
+        <div class="card" style="text-align:center;padding:32px 24px;">
+          <div style="font-size:40px;margin-bottom:16px;">⚡</div>
+          <h3 class="c-dark mb-10">Instant Promotions</h3>
+          <p class="body-sm c-gray">Weekly ad goes from print to digital — update prices and deals in seconds, reach everyone instantly.</p>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--dark);padding:28px 36px;">
+        <div class="flex items-c justify-b flex-wrap gap-20">
+          <div style="text-align:center;">
+            <div class="stat-num c-orange">28</div>
+            <div class="stat-label c-dim">stores to connect</div>
+          </div>
+          <div style="width:1px;height:60px;background:rgba(255,255,255,0.08);"></div>
+          <div style="text-align:center;">
+            <div class="stat-num c-white">100K+</div>
+            <div class="stat-label c-dim">daily customers to reach</div>
+          </div>
+          <div style="width:1px;height:60px;background:rgba(255,255,255,0.08);"></div>
+          <div style="text-align:center;">
+            <div class="stat-num c-white">5K+</div>
+            <div class="stat-label c-dim">products to showcase</div>
+          </div>
+          <div style="width:1px;height:60px;background:rgba(255,255,255,0.08);"></div>
+          <div style="text-align:center;">
+            <div class="stat-num c-orange">1</div>
+            <div class="stat-label c-dim">unified platform</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SLIDE 12 · CTA                                          -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="slide bg-orange" id="s12">
+    <div class="grid-bg" style="background-image:linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.05) 1px, transparent 1px);background-size:64px 64px;"></div>
+    <div class="glow" style="width:500px;height:500px;top:-100px;left:-100px;background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 65%);"></div>
+
+    <div class="z1 content-md center flex flex-col items-c">
+
+      <div class="pill mb-32" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);">
+        <span class="live-dot" style="background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.3);"></span>
+        Phase 1 is live and ready to demo
+      </div>
+
+      <h1 class="c-white mb-16" style="text-align:center;letter-spacing:-2.5px;">
+        Here's where we are<br>and what comes next.
+      </h1>
+
+      <p class="lead mb-48" style="color:rgba(255,255,255,0.75);text-align:center;max-width:500px;margin-top:16px;">
+        Phase 1 is largely built and running. The next step is reviewing it together, filling in the remaining pieces, and deciding when to go live.
+      </p>
+
+      <div class="grid-2 gap-16" style="max-width:540px;width:100%;margin-bottom:40px;">
+        <a href="https://bbsm-website.vercel.app" target="_blank" rel="noopener" style="text-decoration:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:18px;padding:22px;text-align:center;display:block;transition:background 0.2s,transform 0.2s;cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,0.25)';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255,255,255,0.15)';this.style.transform='translateY(0)';">
+          <div style="font-size:28px;margin-bottom:8px;">🌐</div>
+          <h4 style="color:#fff;margin-bottom:4px;">View Website</h4>
+          <p style="font-size:12px;color:rgba(255,255,255,0.6);font-weight:500;">bbsm-website.vercel.app</p>
+        </a>
+        <a href="https://bbsm-admin.vercel.app" target="_blank" rel="noopener" style="text-decoration:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:18px;padding:22px;text-align:center;display:block;transition:background 0.2s,transform 0.2s;cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,0.25)';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255,255,255,0.15)';this.style.transform='translateY(0)';">
+          <div style="font-size:28px;margin-bottom:8px;">⚙️</div>
+          <h4 style="color:#fff;margin-bottom:4px;">View Admin</h4>
+          <p style="font-size:12px;color:rgba(255,255,255,0.6);font-weight:500;">bbsm-admin.vercel.app</p>
+        </a>
+      </div>
+
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:1.5px;font-weight:600;text-transform:uppercase;">
+        BBSM Digital Platform · 2026
+      </p>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ── Navigation ──────────────────────────────────────────────────────── -->
+<div class="nav">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)">←</button>
+  <div class="dots" id="dots"></div>
+  <div class="slide-num" id="slide-num">1 / 12</div>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsEl = document.getElementById('dots');
+  const slideNumEl = document.getElementById('slide-num');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const total = slides.length;
+  let cur = 0;
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(n) {
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add('prev');
+    setTimeout(() => slides[cur < n ? cur : n + (cur === n ? 0 : 0)].classList.remove('prev'), 450);
+
+    const oldCur = cur;
+    cur = n;
+
+    slides[oldCur].classList.remove('active');
+    slides[oldCur].classList.add('prev');
+    setTimeout(() => slides[oldCur].classList.remove('prev'), 460);
+
+    slides[cur].classList.add('active');
+
+    const dots = dotsEl.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+
+    slideNumEl.textContent = (cur + 1) + ' / ' + total;
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  function go(dir) {
+    const n = cur + dir;
+    if (n >= 0 && n < total) goTo(n);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                   { e.preventDefault(); go(-1); }
+  });
+
+  // Touch swipe
+  let tx = 0;
+  document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Init button state
+  btnPrev.disabled = true;
+</script>
+</body>
+</html>

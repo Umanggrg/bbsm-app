@@ -47,6 +47,7 @@ export default function OffersScreen() {
       {/* Header */}
       <View style={[styles.header, { paddingHorizontal: PADDING }]}>
         <View>
+          <Text style={styles.headerLabel}>THIS WEEK</Text>
           <Text style={[styles.headerTitle, isTablet && { fontSize: 30 }]}>Offers & Deals</Text>
           {data?.pagination && (
             <Text style={styles.headerCount}>
@@ -128,20 +129,28 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
 
   header: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.textPrimary,
     paddingTop: 14,
     paddingBottom: 18,
   },
+  headerLabel: {
+    fontFamily: 'Sora_700Bold',
+    fontSize: 10,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    marginBottom: 3,
+  },
   headerTitle: {
     fontFamily: 'Sora_700Bold',
-    fontSize: 24,
+    fontSize: 26,
     color: '#fff',
-    letterSpacing: -0.3,
+    letterSpacing: -0.44,
   },
   headerCount: {
     fontFamily: 'Sora_400Regular',
     fontSize: 13,
-    color: 'rgba(255,255,255,0.68)',
+    color: 'rgba(255,255,255,0.5)',
     marginTop: 3,
   },
 
