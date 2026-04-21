@@ -66,8 +66,8 @@ export default function Navbar() {
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `px-4 py-2 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap ${
-                    isActive ? 'text-primary bg-primary-light' : 'text-navy hover:text-primary hover:bg-primary-lighter'
+                  `relative px-4 py-2 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap nav-link-underline ${
+                    isActive ? 'text-primary bg-primary-light active' : 'text-navy hover:text-primary hover:bg-primary-lighter'
                   }`
                 }
               >
@@ -80,7 +80,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3 ml-auto shrink-0">
             <a
               href="https://apps.apple.com"
-              className="px-5 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark active:scale-95 transition-all"
+              className="px-5 py-2 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm hover:shadow-glow-lg"
             >
               Download App
             </a>

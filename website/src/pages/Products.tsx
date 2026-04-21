@@ -14,13 +14,19 @@ function ProductCard({ p }: { p: Product }) {
   return (
     <Link
       to={`/products/${p.id}`}
-      className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200 block"
+      className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-200 block"
     >
       <div className="h-44 bg-cream flex items-center justify-center relative overflow-hidden">
         {p.image_url
-          ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400" />
+          ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           : <Package size={40} className="text-gray-200" />
         }
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/18 transition-colors duration-300 flex items-center justify-center">
+          <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0 bg-white text-navy text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-lg">
+            View details
+          </span>
+        </div>
         {p.is_featured && (
           <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded flex items-center gap-1">
             <Star size={8} fill="currentColor" /> Featured
@@ -28,7 +34,7 @@ function ProductCard({ p }: { p: Product }) {
         )}
       </div>
       <div className="p-4 border-t border-black/[0.05]">
-        {p.category && <p className="text-[10px] font-semibold text-mid-gray uppercase tracking-wider mb-1">{p.category}</p>}
+        {p.category && <p className="text-[9px] font-bold text-primary/80 uppercase tracking-widest mb-1.5">{p.category}</p>}
         <p className="font-semibold text-navy text-sm leading-snug group-hover:text-primary transition-colors line-clamp-2">{p.name}</p>
         {p.name_ne && <p className="text-mid-gray text-xs mt-0.5">{p.name_ne}</p>}
         <div className="flex items-baseline gap-1 mt-3 pt-3 border-t border-black/[0.05]">
@@ -42,13 +48,13 @@ function ProductCard({ p }: { p: Product }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-card">
-      <div className="h-44 bg-gray-100" />
+    <div className="bg-white rounded-2xl overflow-hidden shadow-card">
+      <div className="h-44 skeleton" />
       <div className="p-4 space-y-2.5 border-t border-black/[0.05]">
-        <div className="h-3 bg-gray-100 rounded w-1/3" />
-        <div className="h-4 bg-gray-100 rounded w-3/4" />
-        <div className="h-3 bg-gray-100 rounded w-1/2" />
-        <div className="h-5 bg-gray-100 rounded w-1/3 mt-3" />
+        <div className="h-2.5 skeleton rounded w-1/4" />
+        <div className="h-4 skeleton rounded w-3/4" />
+        <div className="h-3 skeleton rounded w-1/2" />
+        <div className="h-5 skeleton rounded w-1/3 mt-3" />
       </div>
     </div>
   );
